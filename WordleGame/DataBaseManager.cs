@@ -9,7 +9,7 @@ namespace WordleGame
 {
     public class DataBaseManager
     {
-        private readonly string _dbPath = "C:\\Users\\sisis\\source\\repos\\WordleGame\\WordleGame\\words.db";
+        private readonly string _dbPath = "words.db";
         public DataBaseManager() { }
 
         public bool CheckWord(string word, int wordLength)

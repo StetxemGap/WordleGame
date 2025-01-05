@@ -202,15 +202,15 @@ public partial class MainWindow : Window
             switch (_viewModel.WordLength)
             {
                 case 4:
-                    filePath = "C:\\Users\\sisis\\source\\repos\\WordleGame\\WordleGame\\Views\\words4.txt";
+                    filePath = "words4.txt";
                     break;
 
                 case 5:
-                    filePath = "C:\\Users\\sisis\\source\\repos\\WordleGame\\WordleGame\\Views\\words5.txt";
+                    filePath = "words5.txt";
                     break;
 
                 case 6:
-                    filePath = "C:\\Users\\sisis\\source\\repos\\WordleGame\\WordleGame\\Views\\words6.txt";
+                    filePath = "words6.txt";
                     break;
 
                 default:
