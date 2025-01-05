@@ -11,23 +11,18 @@
 	<Grid>
 		<TextBlock x:Name="HintText" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="16" Margin="10"/>
 
-		<UniformGrid x:Name="InputGrid" Rows="1" Columns="5" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10, 50, 10, 0">
-			<TextBox x:Name="TextBox1" MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center" Margin="5"/>
-			<TextBox x:Name="TextBox2" MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
-			<TextBox x:Name="TextBox3" MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
-			<TextBox x:Name="TextBox4" MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
-			<TextBox x:Name="TextBox5" MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
-		</UniformGrid>
+		<TextBox x:Name="WordInput" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Margin="10, 50, 10, 0"
+                 Width="300" MaxLength="{Binding WordLength}" />
 
 		<StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="20">
 			<Button Content="Submit" Click="SubmitGuess" Margin="5"/>
 			<Button Content="Reset" Click="ResetGame" Margin="5"/>
 		</StackPanel>
 
-		<ListBox x:Name="GuessesList" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10, 120, 10, 80" ItemsSource="{Binding Guesses}">
+		<ListBox x:Name="GuessesList" ItemsSource="{Binding Guesses}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10, 120, 10, 80">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
-					<UniformGrid Rows="1" Columns="5">
+					<UniformGrid Rows="1" Columns="{Binding WordLength}">
 						<Border BorderThickness="1" BorderBrush="Black" Background="{Binding Background1}" Padding="5" Margin="2">
 							<TextBlock Text="{Binding Letter1}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
 						</Border>

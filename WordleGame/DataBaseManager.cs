@@ -9,7 +9,7 @@ namespace WordleGame
 {
     public class DataBaseManager
     {
-        private readonly string _dbPath = "words.db";
+        private readonly string _dbPath = "C:\\Users\\sisis\\source\\repos\\WordleGame\\WordleGame\\words.db";
         public DataBaseManager() { }
 
         public bool CheckWord(string word, int wordLength)
@@ -18,30 +18,30 @@ namespace WordleGame
             switch (wordLength)
             {
                 case 4:
-                    tableName = "4letters";
+                    tableName = "letters4";
                     break;
 
                 case 5:
-                    tableName = "5letters";
+                    tableName = "letters5";
                     break;
 
                 case 6:
-                    tableName = "6letters";
+                    tableName = "letters6";
                     break;
 
                 default:
                     throw new ArgumentException("Длина слова не может быть меньше 4 и больше 6 букв");
             }
 
-            using var connection = new SqliteConnection($"Data Source = words.db");
+            using var connection = new SqliteConnection($"Data Source = {_dbPath}");
             connection.Open();
 
             var command = connection.CreateCommand();
             command.CommandText = $@"
                         SELECT COUNT(*)
                         FROM {tableName}
-                        WHERE Word = $word;";
-            command.Parameters.AddWithValue("$word", word.ToUpper());
+                        WHERE word = @word;";
+            command.Parameters.AddWithValue("@word", word.ToLower());
 
             long count = (long)command.ExecuteScalar();
             return (count > 0);

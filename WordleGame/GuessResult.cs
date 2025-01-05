@@ -24,7 +24,6 @@ namespace WordleGame
         public string Letter5 { get; set; }
         public IBrush Background5 { get; set; }
 
-        // Свойство для доступа к буквам и их цветам
         public (string Letter, IBrush Background)[] Letters => new[]
         {
             (Letter1, Background1),

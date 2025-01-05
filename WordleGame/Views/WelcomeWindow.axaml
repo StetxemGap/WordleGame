@@ -11,6 +11,9 @@
 				   VerticalAlignment="Top" 
 				   HorizontalAlignment="Center" 
 				   FontSize="16" Margin="10"/>
+		<Button Content="4 буквы" Click="Set4LetterMode" Margin="5"/>
+		<Button Content="5 букв" Click="Set5LetterMode" Margin="5"/>
+		<Button Content="6 букв" Click="Set6LetterMode" Margin="5"/>
 		<Button Content="Start" Click="ToMainWindow"></Button>
 	</StackPanel>
 </Window>

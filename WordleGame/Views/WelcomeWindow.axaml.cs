@@ -9,17 +9,33 @@ namespace WordleGame;
 
 public partial class WelcomeWindow : Window
 {
-    private static readonly HttpClient HttpClient = new HttpClient();
+    private MainWindowViewModel _viewModel;
     public WelcomeWindow()
     {
         InitializeComponent();
+        _viewModel = new MainWindowViewModel();
+        DataContext = _viewModel;
     }
 
     private void ToMainWindow(object sender, RoutedEventArgs e)
     {
-        var mainWindow = new MainWindow();
+        var mainWindow = new MainWindow(_viewModel);
         mainWindow.Show();
         this.Close();
     }
 
+    private void Set4LetterMode(object sender, RoutedEventArgs e)
+    {
+        _viewModel.WordLength = 4;
+    }
+
+    private void Set5LetterMode(object sender, RoutedEventArgs e)
+    {
+        _viewModel.WordLength = 5;
+    }
+
+    private void Set6LetterMode(object sender, RoutedEventArgs e)
+    {
+        _viewModel.WordLength = 6;
+    }
 }

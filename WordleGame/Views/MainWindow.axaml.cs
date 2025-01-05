@@ -12,48 +12,26 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.IO;
-using WordleGame;
+using Avalonia.LogicalTree;
 
 namespace WordleGame.Views;
 
 public partial class MainWindow : Window
 {
+    private MainWindowViewModel _viewModel;
     private string targetWord = string.Empty;
     public ObservableCollection<GuessResult> Guesses { get; set; } = new ObservableCollection<GuessResult>();
 
-    public MainWindow()
+    public MainWindow(MainWindowViewModel viewModel)
     {
         InitializeComponent();
+
+        _viewModel = viewModel;
         DataContext = this;
+
         LoadRandomWord();
         UpdateHintText();
-
-        foreach (var textBox in InputGrid.Children.OfType<TextBox>())
-        {
-            textBox.KeyDown += SubmitGuess;
-        }
-
-        TextBox1.TextChanged += OnTextChanged;
-        TextBox1.KeyDown += OnKeyLeft;
-        TextBox1.KeyDown += OnKeyRight;
-
-        TextBox2.TextChanged += OnTextChanged;
-        TextBox2.KeyDown += OnKeyLeft;
-        TextBox2.KeyDown += OnKeyRight;
-
-        TextBox3.TextChanged += OnTextChanged;
-        TextBox3.KeyDown += OnKeyLeft;
-        TextBox3.KeyDown += OnKeyRight;
-
-        TextBox4.TextChanged += OnTextChanged;
-        TextBox4.KeyDown += OnKeyLeft;
-        TextBox4.KeyDown += OnKeyRight;
-
-        TextBox5.TextChanged += OnTextChanged;
-        TextBox5.KeyDown += OnKeyLeft;
-        TextBox5.KeyDown += OnKeyRight;
     }
-
 
     private void UpdateHintText()
     {
@@ -70,77 +48,72 @@ public partial class MainWindow : Window
         }
     }
 
-    private async void SubmitGuess(object sender, KeyEventArgs e)
-    {
-        if (e.Key != Key.Enter)
-        {
-            return;
-        }
+    //private async void SubmitGuess(object sender, KeyEventArgs e)
+    //{
+    //    if (e.Key != Key.Enter)
+    //    {
+    //        return;
+    //    }
 
-        var textBoxes = InputGrid.Children.OfType<TextBox>().ToArray();
-        string guess = string.Join("", textBoxes.Select(tb => tb.Text.ToUpper()));
+    //    string guess = WordInput.Text.ToUpper();
 
-        if (guess.Length != 5)
-        {
-            HintText.Text = "Слово должно состоять из 5 букв!";
-            return;
-        }
+    //    if (guess.Length != _viewModel.WordLength)
+    //    {
+    //        HintText.Text = $"Слово должно состоять из {_viewModel.WordLength} букв!";
+    //        return;
+    //    }
 
-        if (!Regex.IsMatch(guess, "^[А-ЯЁ]+$"))
-        {
-            HintText.Text = "Используйте только русские буквы!";
-            return;
-        }
+    //    if (!Regex.IsMatch(guess, "^[А-ЯЁ]+$"))
+    //    {
+    //        HintText.Text = "Используйте только русские буквы!";
+    //        return;
+    //    }
 
-        var dataBaseManager = new DataBaseManager();
-        bool res = dataBaseManager.CheckWord(guess, guess.Length);
+    //    var dataBaseManager = new DataBaseManager();
+    //    bool res = dataBaseManager.CheckWord(guess, guess.Length);
 
-        if (!res)
-        {
-            HintText.Text = "Такого слова нет!";
-            return;
-        }
+    //    if (!res)
+    //    {
+    //        HintText.Text = "Такого слова нет!";
+    //        return;
+    //    }
 
-        var result = new GuessResult();
-        for (int i = 0; i < 5; i++)
-        {
-            result.SetLetter(i, guess[i].ToString(), GetColor(guess[i], i));
-        }
+    //    var result = new GuessResult();
+    //    for (int i = 0; i < _viewModel.WordLength; i++)
+    //    {
+    //        result.SetLetter(i, guess[i].ToString(), GetColor(guess[i], i));
+    //    }
 
-        Guesses.Add(result);
+    //    Guesses.Add(result);
 
-        foreach (var textBox in textBoxes)
-        {
-            textBox.Text = string.Empty;
-        }
+    //    for (int i = 0; i < _viewModel.InputLetters.Count; i++)
+    //    {
+    //        _viewModel.InputLetters[i] = "";
+    //    }
 
-        if (guess == targetWord)
-        {
-            HintText.Text = "Вы выиграли!";
-        }
-        else if (Guesses.Count >= 6)
-        {
-            HintText.Text = $"Игра окончена! Загаданное слово: {targetWord}.";
-        }
-        else
-        {
-            UpdateHintText();
-        }
+    //    if (guess == targetWord)
+    //    {
+    //        HintText.Text = "Вы выиграли!";
+    //    }
+    //    else if (Guesses.Count >= 6)
+    //    {
+    //        HintText.Text = $"Игра окончена! Загаданное слово: {targetWord}.";
+    //    }
+    //    else
+    //    {
+    //        UpdateHintText();
+    //    }
 
-        if (textBoxes.Length > 0)
-        {
-            textBoxes[0].Focus();
-        }
-    }
+    //    WordInput.Focus();
+    //}
 
     private async void SubmitGuess(object sender, RoutedEventArgs e)
     {
-        var textBoxes = InputGrid.Children.OfType<TextBox>().ToArray();
-        string guess = string.Join("", textBoxes.Select(tb => tb.Text.ToUpper()));
+        string guess = WordInput.Text.ToUpper();
 
-        if (guess.Length != 5)
+        if (guess.Length != _viewModel.WordLength)
         {
-            HintText.Text = "Слово должно состоять из 5 букв!";
+            HintText.Text = $"Слово должно состоять из {_viewModel.WordLength} букв!";
             return;
         }
 
@@ -160,17 +133,12 @@ public partial class MainWindow : Window
         }
 
         var result = new GuessResult();
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < _viewModel.WordLength; i++)
         {
             result.SetLetter(i, guess[i].ToString(), GetColor(guess[i], i));
         }
 
         Guesses.Add(result);
-
-        foreach (var textBox in textBoxes)
-        {
-            textBox.Text = string.Empty;
-        }
 
         if (guess == targetWord)
         {
@@ -184,6 +152,8 @@ public partial class MainWindow : Window
         {
             UpdateHintText();
         }
+
+        WordInput.Focus();
     }
 
     private IBrush GetColor(char letter, int index)
@@ -198,7 +168,7 @@ public partial class MainWindow : Window
             int targetCount = targetWord.Count(c => c == letter);
 
             int correctCount = 0;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < _viewModel.WordLength; i++)
             {
                 if (targetWord[i] == letter && Guesses.Any(g => g.Letters[i].Letter == letter.ToString() && g.Letters[i].Background == Brushes.Green))
                 {
@@ -213,13 +183,13 @@ public partial class MainWindow : Window
         }
         return Brushes.Gray;
     }
+
     private void ResetGame(object sender, RoutedEventArgs e)
     {
-        Guesses.Clear();
-        LoadRandomWord();
-        foreach (var textBox in InputGrid.Children.OfType<TextBox>())
+        _viewModel.InputLetters.Clear();
+        for (int i = 0; i < _viewModel.WordLength; i++)
         {
-            textBox.Text = string.Empty;
+            _viewModel.InputLetters.Add("");
         }
         UpdateHintText();
     }
@@ -228,11 +198,28 @@ public partial class MainWindow : Window
     {
         try
         {
-            string filePath = "C:\\Users\\sisis\\source\\repos\\WordleGame\\WordleGame\\Views\\words5.txt";
+            string filePath = null;
+            switch (_viewModel.WordLength)
+            {
+                case 4:
+                    filePath = "C:\\Users\\sisis\\source\\repos\\WordleGame\\WordleGame\\Views\\words4.txt";
+                    break;
+
+                case 5:
+                    filePath = "C:\\Users\\sisis\\source\\repos\\WordleGame\\WordleGame\\Views\\words5.txt";
+                    break;
+
+                case 6:
+                    filePath = "C:\\Users\\sisis\\source\\repos\\WordleGame\\WordleGame\\Views\\words6.txt";
+                    break;
+
+                default:
+                    break;
+            }
 
             if (!File.Exists(filePath))
             {
-                Console.WriteLine("Файл words5.txt не найден.");
+                Console.WriteLine("Файл wordsN.txt не найден.");
                 return "СЛОВО";
             }
 
@@ -260,61 +247,68 @@ public partial class MainWindow : Window
         }
     }
 
-    private class SpellResult
-    {
-        public string Word { get; set; }
-        public List<string> Suggestions { get; set; }
-    }
+    //private void OnTextChanged(object sender, TextChangedEventArgs e)
+    //{
+    //    var currentTextBox = sender as TextBox;
+    //    int currentIndex = InputBoxes.GetLogicalChildren().OfType<TextBox>().ToList().IndexOf(currentTextBox);
 
-    private void OnTextChanged(object sender, TextChangedEventArgs e)
-    {
-        var currentTextBox = sender as TextBox;
+    //    if (currentIndex >= 0 && currentIndex < _viewModel.InputLetters.Count)
+    //    {
+    //        _viewModel.InputLetters[currentIndex] = currentTextBox.Text;
+    //    }
+    //}
 
-        if (currentTextBox.Text.Length == currentTextBox.MaxLength)
-        {
-            MoveFocusToNextTextBox(currentTextBox);
-        }
-    }
+    //private void OnTextChanged(object sender, TextChangedEventArgs e)
+    //{
+    //    var currentTextBox = sender as TextBox;
 
-    private void OnKeyRight(object sender, KeyEventArgs e)
-    {
-        var currentTextBox = sender as TextBox;
+    //    if (currentTextBox.Text.Length == currentTextBox.MaxLength)
+    //    {
+    //        MoveFocusToNextTextBox(currentTextBox);
+    //    }
+    //}
 
-        if (e.Key == Key.Right)
-        {
-            MoveFocusToNextTextBox(currentTextBox);
-        }
-    }
+    //private void OnKeyRight(object sender, KeyEventArgs e)
+    //{
+    //    var currentTextBox = sender as TextBox;
 
-    private void MoveFocusToNextTextBox(TextBox currentTextBox)
-    {
-        int currentIndex = InputGrid.Children.IndexOf(currentTextBox);
+    //    if (e.Key == Key.Right)
+    //    {
+    //        MoveFocusToNextTextBox(currentTextBox);
+    //    }
+    //}
 
-        if (currentIndex < InputGrid.Children.Count - 1)
-        {
-            var nextTextBox = InputGrid.Children[currentIndex + 1] as TextBox;
-            nextTextBox.Focus();
-        }
-    }
+    //private void MoveFocusToNextTextBox(TextBox currentTextBox)
+    //{
+    //    var textBoxes = InputBoxes.GetLogicalChildren().OfType<TextBox>().ToList();
+    //    int currentIndex = textBoxes.IndexOf(currentTextBox);
 
-    private void OnKeyLeft(object sender, KeyEventArgs e)
-    {
-        var currentTextBox = sender as TextBox;
+    //    if (currentIndex < textBoxes.Count - 1)
+    //    {
+    //        var nextTextBox = textBoxes[currentIndex + 1];
+    //        nextTextBox.Focus();
+    //    }
+    //}
 
-        if (e.Key == Key.Left)
-        {
-            MoveFocusToPreviousTextBox(currentTextBox);
-        }
-    }
+    //private void OnKeyLeft(object sender, KeyEventArgs e)
+    //{
+    //    var currentTextBox = sender as TextBox;
 
-    private void MoveFocusToPreviousTextBox(TextBox currentTextBox)
-    {
-        int currentIndex = InputGrid.Children.IndexOf(currentTextBox);
+    //    if (e.Key == Key.Left)
+    //    {
+    //        MoveFocusToPreviousTextBox(currentTextBox);
+    //    }
+    //}
 
-        if (currentIndex > 0)
-        {
-            var previousTextBox = InputGrid.Children[currentIndex - 1] as TextBox;
-            previousTextBox.Focus();
-        }
-    }
+    //private void MoveFocusToPreviousTextBox(TextBox currentTextBox)
+    //{
+    //    var textBoxes = InputBoxes.GetLogicalChildren().OfType<TextBox>().ToList();
+    //    int currentIndex = textBoxes.IndexOf(currentTextBox);
+
+    //    if (currentIndex > 0)
+    //    {
+    //        var previousTextBox = textBoxes[currentIndex - 1];
+    //        previousTextBox.Focus();
+    //    }
+    //}
 }
