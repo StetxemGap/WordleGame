@@ -11,13 +11,12 @@
 	<Grid>
 		<TextBlock x:Name="HintText" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="16" Margin="10"/>
 
-		<!-- Поля для ввода букв -->
 		<UniformGrid x:Name="InputGrid" Rows="1" Columns="5" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10, 50, 10, 0">
-			<TextBox MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
-			<TextBox MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
-			<TextBox MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
-			<TextBox MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
-			<TextBox MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
+			<TextBox x:Name="TextBox1" MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center" Margin="5"/>
+			<TextBox x:Name="TextBox2" MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
+			<TextBox x:Name="TextBox3" MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
+			<TextBox x:Name="TextBox4" MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
+			<TextBox x:Name="TextBox5" MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
 		</UniformGrid>
 
 		<StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="20">

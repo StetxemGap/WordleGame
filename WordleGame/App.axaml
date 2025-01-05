@@ -3,6 +3,11 @@
              x:Class="WordleGame.App"
              RequestedThemeVariant="Light">
 
+
+	<Application.Resources>
+		<FontFamily x:Key="Montserrat">Assets/Fonts#Montserrat</FontFamily>
+		<FontFamily x:Key="SourGummy">Assets/Fonts#Sour Gummy</FontFamily>
+	</Application.Resources>
 	<Application.Styles>
 		<FluentTheme />
 	</Application.Styles>

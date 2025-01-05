@@ -27,7 +27,33 @@ public partial class MainWindow : Window
         DataContext = this;
         LoadRandomWord();
         UpdateHintText();
+
+        foreach (var textBox in InputGrid.Children.OfType<TextBox>())
+        {
+            textBox.KeyDown += SubmitGuess;
+        }
+
+        TextBox1.TextChanged += OnTextChanged;
+        TextBox1.KeyDown += OnKeyLeft;
+        TextBox1.KeyDown += OnKeyRight;
+
+        TextBox2.TextChanged += OnTextChanged;
+        TextBox2.KeyDown += OnKeyLeft;
+        TextBox2.KeyDown += OnKeyRight;
+
+        TextBox3.TextChanged += OnTextChanged;
+        TextBox3.KeyDown += OnKeyLeft;
+        TextBox3.KeyDown += OnKeyRight;
+
+        TextBox4.TextChanged += OnTextChanged;
+        TextBox4.KeyDown += OnKeyLeft;
+        TextBox4.KeyDown += OnKeyRight;
+
+        TextBox5.TextChanged += OnTextChanged;
+        TextBox5.KeyDown += OnKeyLeft;
+        TextBox5.KeyDown += OnKeyRight;
     }
+
 
     private void UpdateHintText()
     {
@@ -41,6 +67,67 @@ public partial class MainWindow : Window
         if (string.IsNullOrEmpty(targetWord))
         {
             HintText.Text = "Не удалось загрузить слово.";
+        }
+    }
+
+    private async void SubmitGuess(object sender, KeyEventArgs e)
+    {
+        // Проверяем, была ли нажата клавиша Enter
+        if (e.Key != Key.Enter)
+        {
+            return; // Если не Enter, выходим из метода
+        }
+
+        var textBoxes = InputGrid.Children.OfType<TextBox>().ToArray();
+        string guess = string.Join("", textBoxes.Select(tb => tb.Text.ToUpper()));
+
+        if (guess.Length != 5)
+        {
+            HintText.Text = "Слово должно состоять из 5 букв!";
+            return;
+        }
+
+        if (!Regex.IsMatch(guess, "^[А-ЯЁ]+$"))
+        {
+            HintText.Text = "Используйте только русские буквы!";
+            return;
+        }
+
+        //if (!await WordExists(guess))
+        //{
+        //    HintText.Text = "Такого слова нет!";
+        //    return;
+        //}
+
+        var result = new GuessResult();
+        for (int i = 0; i < 5; i++)
+        {
+            result.SetLetter(i, guess[i].ToString(), GetColor(guess[i], i));
+        }
+
+        Guesses.Add(result);
+
+        foreach (var textBox in textBoxes)
+        {
+            textBox.Text = string.Empty;
+        }
+
+        if (guess == targetWord)
+        {
+            HintText.Text = "Вы выиграли!";
+        }
+        else if (Guesses.Count >= 6)
+        {
+            HintText.Text = $"Игра окончена! Загаданное слово: {targetWord}.";
+        }
+        else
+        {
+            UpdateHintText();
+        }
+
+        if (textBoxes.Length > 0)
+        {
+            textBoxes[0].Focus(); // Переводим фокус на первый TextBox
         }
     }
 
@@ -61,11 +148,11 @@ public partial class MainWindow : Window
             return;
         }
 
-        if (!await WordExists(guess))
-        {
-            HintText.Text = "Такого слова нет!";
-            return;
-        }
+        //if (!await WordExists(guess))
+        //{
+        //    HintText.Text = "Такого слова нет!";
+        //    return;
+        //}
 
         var result = new GuessResult();
         for (int i = 0; i < 5; i++)
@@ -168,25 +255,73 @@ public partial class MainWindow : Window
         }
     }
 
-    private async Task<bool> WordExists(string word)
+    private bool HasMoreThanThreeRepeatingCharactersInRow(string word)
     {
-        try
+        for (int i = 0; i < word.Length - 2; i++)
         {
-            var response = await HttpClient.GetStringAsync($"https://speller.yandex.net/services/spellservice.json/checkText?text={word}");
-            var spellResults = JsonSerializer.Deserialize<List<SpellResult>>(response);
-
-            return spellResults.Count == 0;
+            if (word[i] == word[i + 1] && word[i] == word[i + 2])
+            {
+                return true;
+            }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Ошибка при проверке слова: {ex.Message}");
-            return false;
-        }
+        return false;
     }
 
     private class SpellResult
     {
         public string Word { get; set; }
         public List<string> Suggestions { get; set; }
+    }
+
+    private void OnTextChanged(object sender, TextChangedEventArgs e)
+    {
+        var currentTextBox = sender as TextBox;
+
+        if (currentTextBox.Text.Length == currentTextBox.MaxLength)
+        {
+            MoveFocusToNextTextBox(currentTextBox);
+        }
+    }
+
+    private void OnKeyRight(object sender, KeyEventArgs e)
+    {
+        var currentTextBox = sender as TextBox;
+
+        if (e.Key == Key.Right)
+        {
+            MoveFocusToNextTextBox(currentTextBox);
+        }
+    }
+
+    private void MoveFocusToNextTextBox(TextBox currentTextBox)
+    {
+        int currentIndex = InputGrid.Children.IndexOf(currentTextBox);
+
+        if (currentIndex < InputGrid.Children.Count - 1)
+        {
+            var nextTextBox = InputGrid.Children[currentIndex + 1] as TextBox;
+            nextTextBox.Focus();
+        }
+    }
+
+    private void OnKeyLeft(object sender, KeyEventArgs e)
+    {
+        var currentTextBox = sender as TextBox;
+
+        if (e.Key == Key.Left)
+        {
+            MoveFocusToPreviousTextBox(currentTextBox);
+        }
+    }
+
+    private void MoveFocusToPreviousTextBox(TextBox currentTextBox)
+    {
+        int currentIndex = InputGrid.Children.IndexOf(currentTextBox);
+
+        if (currentIndex > 0)
+        {
+            var previousTextBox = InputGrid.Children[currentIndex - 1] as TextBox;
+            previousTextBox.Focus();
+        }
     }
 }
