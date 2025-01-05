@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:WordleGame.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:WordleGame.Views"
+        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="750"
+        x:Class="WordleGame.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+       Title="Wordle" Height="750" Width="550">
+	<Grid>
+		<TextBlock x:Name="HintText" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="16" Margin="10"/>
+
+		<!-- Поля для ввода букв -->
+		<UniformGrid x:Name="InputGrid" Rows="1" Columns="5" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10, 50, 10, 0">
+			<TextBox MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
+			<TextBox MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
+			<TextBox MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
+			<TextBox MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
+			<TextBox MaxLength="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"/>
+		</UniformGrid>
+
+		<StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="20">
+			<Button Content="Submit" Click="SubmitGuess" Margin="5"/>
+			<Button Content="Reset" Click="ResetGame" Margin="5"/>
+		</StackPanel>
+
+		<ListBox x:Name="GuessesList" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10, 120, 10, 80" ItemsSource="{Binding Guesses}">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<UniformGrid Rows="1" Columns="5">
+						<Border BorderThickness="1" BorderBrush="Black" Background="{Binding Background1}" Padding="5" Margin="2">
+							<TextBlock Text="{Binding Letter1}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
+						</Border>
+						<Border BorderThickness="1" BorderBrush="Black" Background="{Binding Background2}" Padding="5" Margin="2">
+							<TextBlock Text="{Binding Letter2}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
+						</Border>
+						<Border BorderThickness="1" BorderBrush="Black" Background="{Binding Background3}" Padding="5" Margin="2">
+							<TextBlock Text="{Binding Letter3}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
+						</Border>
+						<Border BorderThickness="1" BorderBrush="Black" Background="{Binding Background4}" Padding="5" Margin="2">
+							<TextBlock Text="{Binding Letter4}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
+						</Border>
+						<Border BorderThickness="1" BorderBrush="Black" Background="{Binding Background5}" Padding="5" Margin="2">
+							<TextBlock Text="{Binding Letter5}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
+						</Border>
+					</UniformGrid>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</Grid>
+</Window>
