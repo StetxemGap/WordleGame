@@ -12,12 +12,12 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.IO;
+using WordleGame;
 
 namespace WordleGame.Views;
 
 public partial class MainWindow : Window
 {
-    private static readonly HttpClient HttpClient = new HttpClient();
     private string targetWord = string.Empty;
     public ObservableCollection<GuessResult> Guesses { get; set; } = new ObservableCollection<GuessResult>();
 
@@ -72,10 +72,9 @@ public partial class MainWindow : Window
 
     private async void SubmitGuess(object sender, KeyEventArgs e)
     {
-        // Проверяем, была ли нажата клавиша Enter
         if (e.Key != Key.Enter)
         {
-            return; // Если не Enter, выходим из метода
+            return;
         }
 
         var textBoxes = InputGrid.Children.OfType<TextBox>().ToArray();
@@ -93,11 +92,14 @@ public partial class MainWindow : Window
             return;
         }
 
-        //if (!await WordExists(guess))
-        //{
-        //    HintText.Text = "Такого слова нет!";
-        //    return;
-        //}
+        var dataBaseManager = new DataBaseManager();
+        bool res = dataBaseManager.CheckWord(guess, guess.Length);
+
+        if (!res)
+        {
+            HintText.Text = "Такого слова нет!";
+            return;
+        }
 
         var result = new GuessResult();
         for (int i = 0; i < 5; i++)
@@ -127,7 +129,7 @@ public partial class MainWindow : Window
 
         if (textBoxes.Length > 0)
         {
-            textBoxes[0].Focus(); // Переводим фокус на первый TextBox
+            textBoxes[0].Focus();
         }
     }
 
@@ -148,11 +150,14 @@ public partial class MainWindow : Window
             return;
         }
 
-        //if (!await WordExists(guess))
-        //{
-        //    HintText.Text = "Такого слова нет!";
-        //    return;
-        //}
+        var dataBaseManager = new DataBaseManager();
+        bool res = dataBaseManager.CheckWord(guess, guess.Length);
+
+        if (!res)
+        {
+            HintText.Text = "Такого слова нет!";
+            return;
+        }
 
         var result = new GuessResult();
         for (int i = 0; i < 5; i++)
@@ -253,18 +258,6 @@ public partial class MainWindow : Window
             Console.WriteLine($"Ошибка при загрузке слова: {ex.Message}");
             return "СЛОВО";
         }
-    }
-
-    private bool HasMoreThanThreeRepeatingCharactersInRow(string word)
-    {
-        for (int i = 0; i < word.Length - 2; i++)
-        {
-            if (word[i] == word[i + 1] && word[i] == word[i + 2])
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     private class SpellResult

@@ -6,7 +6,11 @@
         x:Class="WordleGame.WelcomeWindow"
         Title="Welcome" Height="750" Width="550">
 	<StackPanel>
-		<TextBlock Text="WordleClone" FontFamily="SourGummy" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="16" Margin="10"/>
-		<Button Content="Start" HorizontalAlignment="Center" Click="ToMainWindow"></Button>
+		<TextBlock Text="WordleClone" 
+				   FontFamily="SourGummy" 
+				   VerticalAlignment="Top" 
+				   HorizontalAlignment="Center" 
+				   FontSize="16" Margin="10"/>
+		<Button Content="Start" Click="ToMainWindow"></Button>
 	</StackPanel>
 </Window>
