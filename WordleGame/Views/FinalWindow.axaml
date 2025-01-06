@@ -5,7 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="750"
         x:Class="WordleGame.FinalWindow"
         Title="FinalWindow" Height="750" Width="550">
-	<StackPanel>
+	<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
 		<TextBlock x:Name="Congratulation"></TextBlock>
 		<Button Content="Restart" Click="OnRestart"></Button>
 		<Button Content="Close" Click="OnClose"></Button>

@@ -15,7 +15,7 @@
                  Width="300" MaxLength="{Binding WordLength}" />
 
 		<StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="20">
-			<Button Content="Submit" Click="SubmitGuess" Margin="5"/>
+			<Button Content="Submit" Click="WordInputSubmitClick" Margin="5"/>
 			<Button Content="Reset" Click="ResetGame" Margin="5"/>
 		</StackPanel>
 

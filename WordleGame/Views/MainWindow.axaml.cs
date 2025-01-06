@@ -33,6 +33,7 @@ public partial class MainWindow : Window
     }
 
     private MainWindowViewModel _viewModel;
+    private TextBox _textBox;
     private string targetWord = string.Empty;
     public ObservableCollection<GuessResult> Guesses { get; set; } = new ObservableCollection<GuessResult>();
 
@@ -46,11 +47,13 @@ public partial class MainWindow : Window
 
         LoadRandomWord();
         UpdateHintText();
+
+        WordInput.KeyDown += WordInputKeyDown;
     }
 
     private void UpdateHintText()
     {
-        HintText.Text = $"Угадайте слово! Попытка: {Guesses.Count + 1}/6";
+        HintText.Text = $"Попытка: {Guesses.Count + 1}/5";
     }
 
     private async void LoadRandomWord()
@@ -62,7 +65,20 @@ public partial class MainWindow : Window
         }
     }
 
-    private async void SubmitGuess(object sender, RoutedEventArgs e)
+    private void WordInputKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            SubmitGuess();
+        }
+    }
+
+    private void WordInputSubmitClick(object sender, RoutedEventArgs e)
+    {
+        SubmitGuess();
+    }
+
+    private async void SubmitGuess()
     {
         string guess = WordInput.Text.ToUpper();
 
@@ -107,7 +123,7 @@ public partial class MainWindow : Window
             finalWindow.Show();
             this.Close();
         }
-        else if (Guesses.Count >= 6)
+        else if (Guesses.Count >= 5)
         {
             string str = $"Игра окончена! Загаданное слово: {targetWord}.";
             var finalWindow = new FinalWindow(str);
