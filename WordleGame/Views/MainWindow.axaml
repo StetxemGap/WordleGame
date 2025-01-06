@@ -19,28 +19,27 @@
 			<Button Content="Reset" Click="ResetGame" Margin="5"/>
 		</StackPanel>
 
-		<ListBox x:Name="GuessesList" ItemsSource="{Binding Guesses}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10, 120, 10, 80">
-			<ListBox.ItemTemplate>
+		<ItemsControl x:Name="GuessesList" ItemsSource="{Binding Guesses}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10, 120, 10, 80">
+			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<UniformGrid Rows="1" Columns="{Binding WordLength}">
-						<Border BorderThickness="1" BorderBrush="Black" Background="{Binding Background1}" Padding="5" Margin="2">
-							<TextBlock Text="{Binding Letter1}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
-						</Border>
-						<Border BorderThickness="1" BorderBrush="Black" Background="{Binding Background2}" Padding="5" Margin="2">
-							<TextBlock Text="{Binding Letter2}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
-						</Border>
-						<Border BorderThickness="1" BorderBrush="Black" Background="{Binding Background3}" Padding="5" Margin="2">
-							<TextBlock Text="{Binding Letter3}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
-						</Border>
-						<Border BorderThickness="1" BorderBrush="Black" Background="{Binding Background4}" Padding="5" Margin="2">
-							<TextBlock Text="{Binding Letter4}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
-						</Border>
-						<Border BorderThickness="1" BorderBrush="Black" Background="{Binding Background5}" Padding="5" Margin="2">
-							<TextBlock Text="{Binding Letter5}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
-						</Border>
-					</UniformGrid>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<ItemsControl ItemsSource="{Binding Letters}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border BorderThickness="1" BorderBrush="Black" Background="{Binding Background}" Padding="5" Margin="2">
+										<TextBlock Text="{Binding Letter}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+						</ItemsControl>
+					</StackPanel>
 				</DataTemplate>
-			</ListBox.ItemTemplate>
-		</ListBox>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
 	</Grid>
 </Window>

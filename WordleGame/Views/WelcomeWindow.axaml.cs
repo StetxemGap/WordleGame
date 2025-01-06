@@ -15,6 +15,7 @@ public partial class WelcomeWindow : Window
         InitializeComponent();
         _viewModel = new MainWindowViewModel();
         DataContext = _viewModel;
+        this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
     }
 
     private void ToMainWindow(object sender, RoutedEventArgs e)

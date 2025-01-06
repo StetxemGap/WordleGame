@@ -1,0 +1,13 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="750"
+        x:Class="WordleGame.FinalWindow"
+        Title="FinalWindow" Height="750" Width="550">
+	<StackPanel>
+		<TextBlock x:Name="Congratulation"></TextBlock>
+		<Button Content="Restart" Click="OnRestart"></Button>
+		<Button Content="Close" Click="OnClose"></Button>
+	</StackPanel>
+</Window>

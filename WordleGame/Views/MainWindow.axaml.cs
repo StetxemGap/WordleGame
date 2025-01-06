@@ -13,11 +13,25 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.IO;
 using Avalonia.LogicalTree;
+using DynamicData;
 
 namespace WordleGame.Views;
 
 public partial class MainWindow : Window
 {
+    private static readonly string ApiUrl = "https://dictionary.yandex.net/api/v1/dicservice.json/lookup";
+    private static readonly string ApiKey = "dict.1.1.20250106T071243Z.0bb6b26606d67086.a9c7eb40332fb998ba30314c8834f9fca31180f1";
+    public class LetterResult
+    {
+        public string Letter { get; set; } = string.Empty;
+        public IBrush Background { get; set; } = Brushes.Gray;
+    }
+
+    public class GuessResult
+    {
+        public ObservableCollection<LetterResult> Letters { get; set; } = new ObservableCollection<LetterResult>();
+    }
+
     private MainWindowViewModel _viewModel;
     private string targetWord = string.Empty;
     public ObservableCollection<GuessResult> Guesses { get; set; } = new ObservableCollection<GuessResult>();
@@ -28,6 +42,7 @@ public partial class MainWindow : Window
 
         _viewModel = viewModel;
         DataContext = this;
+        this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
         LoadRandomWord();
         UpdateHintText();
@@ -41,71 +56,11 @@ public partial class MainWindow : Window
     private async void LoadRandomWord()
     {
         targetWord = await GetRandomWord();
-        Console.WriteLine(targetWord);
         if (string.IsNullOrEmpty(targetWord))
         {
             HintText.Text = "Не удалось загрузить слово.";
         }
     }
-
-    //private async void SubmitGuess(object sender, KeyEventArgs e)
-    //{
-    //    if (e.Key != Key.Enter)
-    //    {
-    //        return;
-    //    }
-
-    //    string guess = WordInput.Text.ToUpper();
-
-    //    if (guess.Length != _viewModel.WordLength)
-    //    {
-    //        HintText.Text = $"Слово должно состоять из {_viewModel.WordLength} букв!";
-    //        return;
-    //    }
-
-    //    if (!Regex.IsMatch(guess, "^[А-ЯЁ]+$"))
-    //    {
-    //        HintText.Text = "Используйте только русские буквы!";
-    //        return;
-    //    }
-
-    //    var dataBaseManager = new DataBaseManager();
-    //    bool res = dataBaseManager.CheckWord(guess, guess.Length);
-
-    //    if (!res)
-    //    {
-    //        HintText.Text = "Такого слова нет!";
-    //        return;
-    //    }
-
-    //    var result = new GuessResult();
-    //    for (int i = 0; i < _viewModel.WordLength; i++)
-    //    {
-    //        result.SetLetter(i, guess[i].ToString(), GetColor(guess[i], i));
-    //    }
-
-    //    Guesses.Add(result);
-
-    //    for (int i = 0; i < _viewModel.InputLetters.Count; i++)
-    //    {
-    //        _viewModel.InputLetters[i] = "";
-    //    }
-
-    //    if (guess == targetWord)
-    //    {
-    //        HintText.Text = "Вы выиграли!";
-    //    }
-    //    else if (Guesses.Count >= 6)
-    //    {
-    //        HintText.Text = $"Игра окончена! Загаданное слово: {targetWord}.";
-    //    }
-    //    else
-    //    {
-    //        UpdateHintText();
-    //    }
-
-    //    WordInput.Focus();
-    //}
 
     private async void SubmitGuess(object sender, RoutedEventArgs e)
     {
@@ -123,8 +78,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        var dataBaseManager = new DataBaseManager();
-        bool res = dataBaseManager.CheckWord(guess, guess.Length);
+        bool res = await CheckWordExists(guess);
 
         if (!res)
         {
@@ -133,26 +87,39 @@ public partial class MainWindow : Window
         }
 
         var result = new GuessResult();
+        result.Letters = new ObservableCollection<LetterResult>();
+
         for (int i = 0; i < _viewModel.WordLength; i++)
         {
-            result.SetLetter(i, guess[i].ToString(), GetColor(guess[i], i));
+            result.Letters.Add(new LetterResult
+            {
+                Letter = guess[i].ToString(),
+                Background = GetColor(guess[i], i)
+            });
         }
 
         Guesses.Add(result);
 
         if (guess == targetWord)
         {
-            HintText.Text = "Вы выиграли!";
+            string str = "Вы выиграли!";
+            var finalWindow = new FinalWindow(str);
+            finalWindow.Show();
+            this.Close();
         }
         else if (Guesses.Count >= 6)
         {
-            HintText.Text = $"Игра окончена! Загаданное слово: {targetWord}.";
+            string str = $"Игра окончена! Загаданное слово: {targetWord}.";
+            var finalWindow = new FinalWindow(str);
+            finalWindow.Show();
+            this.Close();
         }
         else
         {
             UpdateHintText();
         }
 
+        WordInput.Text = string.Empty;
         WordInput.Focus();
     }
 
@@ -168,12 +135,9 @@ public partial class MainWindow : Window
             int targetCount = targetWord.Count(c => c == letter);
 
             int correctCount = 0;
-            for (int i = 0; i < _viewModel.WordLength; i++)
+            foreach (var guess in Guesses)
             {
-                if (targetWord[i] == letter && Guesses.Any(g => g.Letters[i].Letter == letter.ToString() && g.Letters[i].Background == Brushes.Green))
-                {
-                    correctCount++;
-                }
+                correctCount += guess.Letters.Count(l => l.Letter == letter.ToString() && l.Background == Brushes.Green);
             }
 
             if (correctCount < targetCount)
@@ -186,11 +150,13 @@ public partial class MainWindow : Window
 
     private void ResetGame(object sender, RoutedEventArgs e)
     {
+        Guesses.Clear();
         _viewModel.InputLetters.Clear();
         for (int i = 0; i < _viewModel.WordLength; i++)
         {
             _viewModel.InputLetters.Add("");
         }
+        LoadRandomWord();
         UpdateHintText();
     }
 
@@ -202,15 +168,15 @@ public partial class MainWindow : Window
             switch (_viewModel.WordLength)
             {
                 case 4:
-                    filePath = "words4.txt";
+                    filePath = "..\\..\\..\\..\\WordleGame\\words4.txt";
                     break;
 
                 case 5:
-                    filePath = "words5.txt";
+                    filePath = "..\\..\\..\\..\\WordleGame\\words5.txt";
                     break;
 
                 case 6:
-                    filePath = "words6.txt";
+                    filePath = "..\\..\\..\\..\\WordleGame\\words6.txt";
                     break;
 
                 default:
@@ -220,7 +186,20 @@ public partial class MainWindow : Window
             if (!File.Exists(filePath))
             {
                 Console.WriteLine("Файл wordsN.txt не найден.");
-                return "СЛОВО";
+                switch (_viewModel.WordLength)
+                {
+                    case 4:
+                        return "ПУСК";
+
+                    case 5:
+                        return "СТАРТ";
+
+                    case 6:
+                        return "НАЧАЛО";
+
+                    default:
+                        return "СТАРТ";
+                }
             }
 
             var lines = await File.ReadAllLinesAsync(filePath);
@@ -233,8 +212,20 @@ public partial class MainWindow : Window
 
             if (words.Count == 0)
             {
-                Console.WriteLine("В файле нет подходящих пятибуквенных слов.");
-                return "СЛОВО";
+                switch (_viewModel.WordLength)
+                {
+                    case 4:
+                        return "ПУСК";
+
+                    case 5:
+                        return "СТАРТ";
+
+                    case 6:
+                        return "НАЧАЛО";
+
+                    default:
+                        return "СТАРТ";
+                }
             }
 
             var random = new Random();
@@ -242,73 +233,40 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Ошибка при загрузке слова: {ex.Message}");
-            return "СЛОВО";
+            switch (_viewModel.WordLength)
+            {
+                case 4:
+                    return "ПУСК";
+
+                case 5:
+                    return "СТАРТ";
+
+                case 6:
+                    return "НАЧАЛО";
+
+                default:
+                    return "СТАРТ";
+            }
         }
     }
 
-    //private void OnTextChanged(object sender, TextChangedEventArgs e)
-    //{
-    //    var currentTextBox = sender as TextBox;
-    //    int currentIndex = InputBoxes.GetLogicalChildren().OfType<TextBox>().ToList().IndexOf(currentTextBox);
+    private static async Task<bool> CheckWordExists(string word)
+    {
+        using (HttpClient client = new HttpClient())
+        {
+            string requestUrl = $"{ApiUrl}?key={ApiKey}&lang=ru-en&text={Uri.EscapeDataString(word)}";
 
-    //    if (currentIndex >= 0 && currentIndex < _viewModel.InputLetters.Count)
-    //    {
-    //        _viewModel.InputLetters[currentIndex] = currentTextBox.Text;
-    //    }
-    //}
+            HttpResponseMessage response = await client.GetAsync(requestUrl);
 
-    //private void OnTextChanged(object sender, TextChangedEventArgs e)
-    //{
-    //    var currentTextBox = sender as TextBox;
-
-    //    if (currentTextBox.Text.Length == currentTextBox.MaxLength)
-    //    {
-    //        MoveFocusToNextTextBox(currentTextBox);
-    //    }
-    //}
-
-    //private void OnKeyRight(object sender, KeyEventArgs e)
-    //{
-    //    var currentTextBox = sender as TextBox;
-
-    //    if (e.Key == Key.Right)
-    //    {
-    //        MoveFocusToNextTextBox(currentTextBox);
-    //    }
-    //}
-
-    //private void MoveFocusToNextTextBox(TextBox currentTextBox)
-    //{
-    //    var textBoxes = InputBoxes.GetLogicalChildren().OfType<TextBox>().ToList();
-    //    int currentIndex = textBoxes.IndexOf(currentTextBox);
-
-    //    if (currentIndex < textBoxes.Count - 1)
-    //    {
-    //        var nextTextBox = textBoxes[currentIndex + 1];
-    //        nextTextBox.Focus();
-    //    }
-    //}
-
-    //private void OnKeyLeft(object sender, KeyEventArgs e)
-    //{
-    //    var currentTextBox = sender as TextBox;
-
-    //    if (e.Key == Key.Left)
-    //    {
-    //        MoveFocusToPreviousTextBox(currentTextBox);
-    //    }
-    //}
-
-    //private void MoveFocusToPreviousTextBox(TextBox currentTextBox)
-    //{
-    //    var textBoxes = InputBoxes.GetLogicalChildren().OfType<TextBox>().ToList();
-    //    int currentIndex = textBoxes.IndexOf(currentTextBox);
-
-    //    if (currentIndex > 0)
-    //    {
-    //        var previousTextBox = textBoxes[currentIndex - 1];
-    //        previousTextBox.Focus();
-    //    }
-    //}
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                return jsonResponse.Contains("\"def\":") && !jsonResponse.Contains("\"def\":[]");
+            }
+            else
+            {
+                throw new Exception($"Ошибка API: {response.StatusCode}");
+            }
+        }
+    }
 }
