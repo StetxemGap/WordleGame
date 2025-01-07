@@ -33,9 +33,14 @@ public partial class MainWindow : Window
     }
 
     private MainWindowViewModel _viewModel;
-    private TextBox _textBox;
+
     private string targetWord = string.Empty;
     public ObservableCollection<GuessResult> Guesses { get; set; } = new ObservableCollection<GuessResult>();
+
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
 
     public MainWindow(MainWindowViewModel viewModel)
     {
@@ -65,7 +70,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void WordInputKeyDown(object sender, KeyEventArgs e)
+    private void WordInputKeyDown(object? sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
         {
@@ -181,7 +186,7 @@ public partial class MainWindow : Window
         try
         {
             string filePath = null;
-            switch (_viewModel.WordLength)
+            switch (_viewModel?.WordLength)
             {
                 case 4:
                     filePath = "..\\..\\..\\..\\WordleGame\\words4.txt";
@@ -202,7 +207,7 @@ public partial class MainWindow : Window
             if (!File.Exists(filePath))
             {
                 Console.WriteLine("Файл wordsN.txt не найден.");
-                switch (_viewModel.WordLength)
+                switch (_viewModel?.WordLength)
                 {
                     case 4:
                         return "ПУСК";
@@ -228,7 +233,7 @@ public partial class MainWindow : Window
 
             if (words.Count == 0)
             {
-                switch (_viewModel.WordLength)
+                switch (_viewModel?.WordLength)
                 {
                     case 4:
                         return "ПУСК";

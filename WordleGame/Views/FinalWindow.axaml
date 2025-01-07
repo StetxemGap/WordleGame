@@ -5,9 +5,22 @@
         mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="750"
         x:Class="WordleGame.FinalWindow"
         Title="FinalWindow" Height="750" Width="550">
+	<Grid>
+		<Border>
+			<Border.Background>
+				<ImageBrush Source="C:\Users\sisis\source\repos\WordleGame\WordleGame\Assets\background4.jpg" Stretch="Fill"/>
+			</Border.Background>
+			<Border.Effect>
+				<BlurEffect Radius="3" />
+			</Border.Effect>
+		</Border>
 	<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-		<TextBlock x:Name="Congratulation"></TextBlock>
+		<TextBlock x:Name="Congratulation" FontSize="35"
+					   FontFamily="{StaticResource PressStart}"
+					   Foreground="White" FontWeight="800">Some Text</TextBlock>
+		<Panel Height="100"/>
 		<Button Content="Restart" Click="OnRestart"></Button>
 		<Button Content="Close" Click="OnClose"></Button>
 	</StackPanel>
+	</Grid>
 </Window>

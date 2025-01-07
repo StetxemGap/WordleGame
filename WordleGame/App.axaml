@@ -2,11 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="WordleGame.App"
              RequestedThemeVariant="Light">
-
-
 	<Application.Resources>
 		<FontFamily x:Key="Montserrat">Assets/Fonts#Montserrat</FontFamily>
 		<FontFamily x:Key="SourGummy">Assets/Fonts#Sour Gummy</FontFamily>
+		<FontFamily x:Key="RubikVinyl">Assets/Fonts#Rubik Vinyl</FontFamily>
+		<FontFamily x:Key="Jura">Assets/Fonts#Jura</FontFamily>
+		<FontFamily x:Key="PressStart">Assets/Fonts#Press Start 2P</FontFamily>
+		<FontFamily x:Key="RubikMono">Assets/Fonts#Rubik Mono One</FontFamily>
 	</Application.Resources>
 	<Application.Styles>
 		<FluentTheme />
