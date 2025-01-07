@@ -14,10 +14,11 @@ public partial class FinalWindow : Window
         InitializeComponent();
         this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
     }
-    public FinalWindow(string str)
+    public FinalWindow(string str, string str1)
     {
         InitializeComponent();
         Congratulation.Text = str;
+        TargetWord.Text = str1;
         this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
     }
 

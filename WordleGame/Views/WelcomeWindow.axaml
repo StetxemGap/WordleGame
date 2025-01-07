@@ -8,10 +8,6 @@
 
 	<Window.Styles>
 		<Style Selector="TextBlock.Anime">
-			<Setter Property="RenderTransform">
-				<TranslateTransform Y="0"/>
-			</Setter>
-
 			<Style.Animations>
 				<Animation Duration="0:0:1">
 					<KeyFrame Cue="0%">
@@ -146,11 +142,11 @@
 				</Animation>
 			</Style.Animations>
 		</Style>
-		<Style Selector="Button">
+		<Style Selector="Button.Start">
 			<Setter Property="Background" Value="#00cd8a"/>
-			<Setter Property="Width" Value="200"/>
+			<Setter Property="Width" Value="190"/>
 			<Setter Property="Height" Value="50"/>
-			<Setter Property="Padding" Value="38 12 0 0"/>
+			<Setter Property="Padding" Value="31 12 0 0"/>
 			<Setter Property="Foreground" Value="White"/>
 			<Setter Property="FontFamily" Value="{StaticResource PressStart}"/>
 			<Setter Property="FontSize" Value="20"/>
@@ -166,13 +162,18 @@
 			<Setter Property="Background" Value="#007c42"/>
 			<Setter Property="Foreground" Value="White"/>
 		</Style>
-		<Style Selector="RadioButton:pointerover /template/ ContentPresenter">
-			<Setter Property="Background" Value="#00a465"/>
+
+		<Style Selector="Button.Close">
+			<Setter Property="Background" Value="#00cd8a"/>
+			<Setter Property="Width" Value="170"/>
+			<Setter Property="Height" Value="50"/>
+			<Setter Property="Padding" Value="28 12 0 0"/>
 			<Setter Property="Foreground" Value="White"/>
-		</Style>
-		<Style Selector="RadioButton:pressed/template/ ContentPresenter">
-			<Setter Property="Background" Value="#007c42"/>
-			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="FontFamily" Value="{StaticResource PressStart}"/>
+			<Setter Property="FontSize" Value="20"/>
+			<Setter Property="CornerRadius" Value="15"/>
+			<Setter Property="BorderBrush" Value="White"/>
+			<Setter Property="BorderThickness" Value="5"/>
 		</Style>
 		<Style Selector="RadioButton">
 			<Setter Property="Template">
@@ -212,12 +213,6 @@
 			</Border.Effect>
 		</Border>
 	<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-		<!--<TextBlock Text="WordGuess"
-                   Foreground="White"
-                   FontFamily="{StaticResource PressStart}"
-                   FontWeight="800"
-                   HorizontalAlignment="Center"
-                   FontSize="30" Margin="5"/>-->
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 			<TextBlock Classes="Anime" Text="W" FontSize="40"
 					   FontFamily="{StaticResource PressStart}"
@@ -265,7 +260,11 @@
                          Click="Set6LetterMode" Margin="10 0 0 0"/>
 		</WrapPanel>
 		<Panel Height="50" />
-		<Button Content="Начать" Click="ToMainWindow" HorizontalAlignment="Center"/>
+		<Button Classes="Start" Content="Начать" 
+				Click="ToMainWindow" HorizontalAlignment="Center"/>
+		<Button Classes="Close" Content="Выйти" Click="OnClose"
+		HorizontalAlignment="Center"
+		Margin="0 10 0 0"></Button>
 	</StackPanel>
 	</Grid>
 </Window>

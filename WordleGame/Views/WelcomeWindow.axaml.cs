@@ -39,4 +39,8 @@ public partial class WelcomeWindow : Window
     {
         _viewModel.WordLength = 6;
     }
+    private void OnClose(object sender, RoutedEventArgs e)
+    {
+        this.Close();
+    }
 }

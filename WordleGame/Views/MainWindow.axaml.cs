@@ -20,7 +20,7 @@ namespace WordleGame.Views;
 public partial class MainWindow : Window
 {
     private static readonly string ApiUrl = "https://dictionary.yandex.net/api/v1/dicservice.json/lookup";
-    private static readonly string ApiKey = "dict.1.1.20250106T071243Z.0bb6b26606d67086.a9c7eb40332fb998ba30314c8834f9fca31180f1";
+    private static readonly string ApiKey = "dict.1.1.20250107T180119Z.d7d393b1ef9f247f.1c1d2e2b5ec82daca54d9c390f6aa5f1246b953e";
     public class LetterResult
     {
         public string Letter { get; set; } = string.Empty;
@@ -124,14 +124,16 @@ public partial class MainWindow : Window
         if (guess == targetWord)
         {
             string str = "Вы выиграли!";
-            var finalWindow = new FinalWindow(str);
+            string str1 = "";
+            var finalWindow = new FinalWindow(str, str1);
             finalWindow.Show();
             this.Close();
         }
         else if (Guesses.Count >= 5)
         {
-            string str = $"Игра окончена! Загаданное слово: {targetWord}.";
-            var finalWindow = new FinalWindow(str);
+            string str = "Игра окончена!";
+            string str1 = $"Загаданное слово: {targetWord}.";
+            var finalWindow = new FinalWindow(str, str1);
             finalWindow.Show();
             this.Close();
         }

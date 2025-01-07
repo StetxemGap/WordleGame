@@ -8,16 +8,87 @@
         x:Class="WordleGame.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
        Title="Wordle" Height="750" Width="550">
+	<Window.Styles>
+		<Style Selector="Button.Send">
+			<Setter Property="Background" Value="#00cd8a"/>
+			<Setter Property="Width" Value="60"/>
+			<Setter Property="Height" Value="50"/>
+			<Setter Property="Padding" Value="7 12 0 0"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="FontFamily" Value="{StaticResource PressStart}"/>
+			<Setter Property="FontSize" Value="20"/>
+			<Setter Property="CornerRadius" Value="15"/>
+			<Setter Property="BorderBrush" Value="White"/>
+			<Setter Property="BorderThickness" Value="5"/>
+		</Style>
+		<Style Selector="Button:pointerover /template/ ContentPresenter">
+			<Setter Property="Background" Value="#00a465"/>
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+		<Style Selector="Button:pressed/template/ ContentPresenter">
+			<Setter Property="Background" Value="#007c42"/>
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+		
+		<Style Selector="TextBox">
+			<Setter Property="BorderBrush" Value="#00cd8a"/>
+			<Setter Property="BorderThickness" Value="5"/>
+			<Setter Property="CornerRadius" Value="12"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="Foreground" Value="#005620"/>
+			<Setter Property="FontFamily" Value="{StaticResource PressStart}"/>
+		</Style>
+		<Style Selector="TextBox:pointerover /template/ Border">
+			<Setter Property="BorderBrush" Value="#00a465"/>
+		</Style>
+		<Style Selector="TextBox:focus/template/ Border">
+			<Setter Property="BorderBrush" Value="#00cd8a"/>
+		</Style>
+		<Style Selector="TextBox:focus/template/ ScrollViewer">
+			<Setter Property="Foreground" Value="#005620"/>
+		</Style>
+
+		
+		<Style Selector="Button.Reset">
+			<Setter Property="Background" Value="#00cd8a"/>
+			<Setter Property="Width" Value="190"/>
+			<Setter Property="Height" Value="50"/>
+			<Setter Property="Padding" Value="39 12 0 0"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="FontFamily" Value="{StaticResource PressStart}"/>
+			<Setter Property="FontSize" Value="20"/>
+			<Setter Property="CornerRadius" Value="15"/>
+			<Setter Property="BorderBrush" Value="White"/>
+			<Setter Property="BorderThickness" Value="5"/>
+		</Style>
+	</Window.Styles>
 	<Grid>
-		<TextBlock x:Name="HintText" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="16" Margin="10"/>
-
-		<TextBox x:Name="WordInput" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Margin="10, 50, 10, 0"
+		<Border>
+			<Border.Background>
+				<ImageBrush Source="C:\Users\sisis\source\repos\WordleGame\WordleGame\Assets\background4.jpg" Stretch="Fill"/>
+			</Border.Background>
+			<Border.Effect>
+				<BlurEffect Radius="6" />
+			</Border.Effect>
+		</Border>
+		<TextBlock x:Name="HintText" Text="Текст" 
+				   VerticalAlignment="Top" HorizontalAlignment="Center" 
+				   FontSize="20" 
+				   FontFamily="{StaticResource PressStart}"
+				   Foreground="White"
+				   Margin="0 50 0 0"/>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+		<TextBox x:Name="WordInput" HorizontalAlignment="Center" 
+				 VerticalAlignment="Top" FontSize="20" Margin="60 90 10 0"
                  Width="300" MaxLength="{Binding WordLength}" />
-
-		<StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="20">
-			<Button Content="Submit" Click="WordInputSubmitClick" Margin="5"/>
-			<Button Content="Reset" Click="ResetGame" Margin="5"/>
+			<Button Classes="Send" Content="->" Click="WordInputSubmitClick"
+					Margin=" 0 85 0 0"
+					VerticalAlignment="Top"/>
 		</StackPanel>
+			<Button Classes="Reset" Content="Сброс" Click="ResetGame"
+					Margin="0 5 0 50" 
+					VerticalAlignment="Bottom"
+					HorizontalAlignment="Center"/>
 
 		<ItemsControl x:Name="GuessesList" ItemsSource="{Binding Guesses}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10, 120, 10, 80">
 			<ItemsControl.ItemTemplate>
