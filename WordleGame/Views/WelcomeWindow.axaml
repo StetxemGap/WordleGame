@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="650"
         x:Class="WordleGame.WelcomeWindow"
-        Title="Welcome" Height="650" Width="500" Background="#98b0a9">
+        Title="Welcome" Height="650" Width="500" Background="#394b41">
 
 	<Window.Styles>
 		<Style Selector="TextBlock.Anime">
@@ -206,7 +206,7 @@
 	<Grid>
 		<Border>
 			<Border.Background>
-				<ImageBrush Source="\Assets\background4.jpg" Stretch="Fill"/>
+				<ImageBrush Source="\Assets\background4.jpg" Stretch="UniformToFill"/>
 			</Border.Background>
 			<Border.Effect>
 				<BlurEffect Radius="3" />

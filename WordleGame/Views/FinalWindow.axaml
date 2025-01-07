@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="650"
         x:Class="WordleGame.FinalWindow"
-        Title="FinalWindow" Height="650" Width="500">
+        Title="FinalWindow" Height="650" Width="500" Background="#386c5f">
 	<Window.Styles>
 		<Style Selector="Button.Restart">
 			<Setter Property="Background" Value="#00cd8a"/>
@@ -41,14 +41,14 @@
 		</Style>
 	</Window.Styles>
 	<Grid>
-		<Border>
+		<!--<Border>
 			<Border.Background>
-				<ImageBrush Source="\Assets\background4.jpg" Stretch="Fill"/>
+				<ImageBrush Source="\Assets\background4.jpg" Stretch="UniformToFill"/>
 			</Border.Background>
 			<Border.Effect>
 				<BlurEffect Radius="3" />
 			</Border.Effect>
-		</Border>
+		</Border>-->
 	<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
 		<TextBlock x:Name="Congratulation" FontSize="30"
 					   FontFamily="{StaticResource PressStart}"

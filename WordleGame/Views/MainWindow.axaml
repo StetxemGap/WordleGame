@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="750"
         x:Class="WordleGame.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-       Title="Wordle" Height="750" Width="550">
+       Title="Wordle" Height="750" Width="550" Background="#386c5f">
 	<Window.Styles>
 		<Style Selector="Button.Send">
 			<Setter Property="Background" Value="#00cd8a"/>
@@ -63,14 +63,14 @@
 		</Style>
 	</Window.Styles>
 	<Grid>
-		<Border>
+		<!--<Border BorderBrush="Black">
 			<Border.Background>
-				<ImageBrush Source="\Assets\background4.jpg" Stretch="Fill"/>
+				<ImageBrush Source="\Assets\background4.jpg" Stretch="UniformToFill" />
 			</Border.Background>
 			<Border.Effect>
-				<BlurEffect Radius="6" />
+				<BlurEffect Radius="5" />
 			</Border.Effect>
-		</Border>
+		</Border>-->
 		<TextBlock x:Name="HintText" Text="Текст" 
 				   VerticalAlignment="Top" HorizontalAlignment="Center" 
 				   FontSize="20" 

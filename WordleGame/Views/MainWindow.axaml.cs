@@ -89,13 +89,13 @@ public partial class MainWindow : Window
 
         if (guess.Length != _viewModel.WordLength)
         {
-            HintText.Text = $"Слово должно состоять из {_viewModel.WordLength} букв!";
+            HintText.Text = $"Длина слова - {_viewModel.WordLength}!";
             return;
         }
 
         if (!Regex.IsMatch(guess, "^[А-ЯЁ]+$"))
         {
-            HintText.Text = "Используйте только русские буквы!";
+            HintText.Text = "Только русские буквы!";
             return;
         }
 
