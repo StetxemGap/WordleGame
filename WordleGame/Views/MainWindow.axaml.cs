@@ -150,7 +150,7 @@ public partial class MainWindow : Window
     {
         if (targetWord[index] == letter)
         {
-            return Brushes.Green;
+            return new SolidColorBrush(Color.Parse("#00cd8a"));
         }
 
         if (targetWord.Contains(letter))
@@ -165,10 +165,10 @@ public partial class MainWindow : Window
 
             if (correctCount < targetCount)
             {
-                return Brushes.Yellow;
+                return new SolidColorBrush(Color.Parse("#ede683"));
             }
         }
-        return Brushes.Gray;
+        return new SolidColorBrush(Color.Parse("#d9eddf"));
     }
 
     private void ResetGame(object sender, RoutedEventArgs e)

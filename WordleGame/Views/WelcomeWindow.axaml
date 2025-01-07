@@ -206,7 +206,7 @@
 	<Grid>
 		<Border>
 			<Border.Background>
-				<ImageBrush Source="C:\Users\sisis\source\repos\WordleGame\WordleGame\Assets\background4.jpg" Stretch="Fill"/>
+				<ImageBrush Source="\Assets\background4.jpg" Stretch="Fill"/>
 			</Border.Background>
 			<Border.Effect>
 				<BlurEffect Radius="3" />

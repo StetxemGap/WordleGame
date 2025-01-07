@@ -65,7 +65,7 @@
 	<Grid>
 		<Border>
 			<Border.Background>
-				<ImageBrush Source="C:\Users\sisis\source\repos\WordleGame\WordleGame\Assets\background4.jpg" Stretch="Fill"/>
+				<ImageBrush Source="\Assets\background4.jpg" Stretch="Fill"/>
 			</Border.Background>
 			<Border.Effect>
 				<BlurEffect Radius="6" />
@@ -90,15 +90,28 @@
 					VerticalAlignment="Bottom"
 					HorizontalAlignment="Center"/>
 
-		<ItemsControl x:Name="GuessesList" ItemsSource="{Binding Guesses}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10, 120, 10, 80">
+		<ItemsControl x:Name="GuessesList" ItemsSource="{Binding Guesses}" 
+					  HorizontalAlignment="Center" VerticalAlignment="Center" 
+					  Margin="10, 120, 10, 80">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" 
+								VerticalAlignment="Top">
 						<ItemsControl ItemsSource="{Binding Letters}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
-									<Border BorderThickness="1" BorderBrush="Black" Background="{Binding Background}" Padding="5" Margin="2">
-										<TextBlock Text="{Binding Letter}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
+									<Border BorderThickness="5" 
+											BorderBrush="{Binding Background}" 
+											Background="{Binding Background}"
+											CornerRadius="15"
+											Padding="10" Margin="10">
+										<TextBlock Text="{Binding Letter}"
+												   FontFamily="{StaticResource PressStart}"
+												   HorizontalAlignment="Center" 
+												   VerticalAlignment="Center" 
+												   FontSize="25"
+												   Foreground="#005620"
+												   FontWeight="Black"/>
 									</Border>
 								</DataTemplate>
 							</ItemsControl.ItemTemplate>
